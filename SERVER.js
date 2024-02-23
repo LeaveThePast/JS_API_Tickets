@@ -73,5 +73,40 @@ app.post("/", (req, res) => {
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+app.put("/", (req, res) => {
+  const method = req.query.method;
+
+  if (method === "updateTicket") {
+    const { id, name, description, status } = req.body;
+    const index = tickets.findIndex((t) => t.id === id);
+
+    if (index !== -1) {
+      tickets[index] = { id, name, description, status };
+      res.json({ message: "Ticket updated successfully" });
+    } else {
+      res.status(404).send("Ticket not found");
+    }
+  } else {
+    res.status(400).send("Invalid method");
+  }
+});
+
+app.delete("/", (req, res) => {
+  const method = req.query.method;
+
+  if (method === "deleteTicket") {
+    const id = req.body.id;
+    const index = tickets.findIndex((t) => t.id === id);
+
+    if (index !== -1) {
+      tickets.splice(index, 1);
+      res.json({ message: "Ticket deleted successfully" });
+    } else {
+      res.status(404).send("Ticket not found");
+    }
+  } else {
+    res.status(400).send("Invalid method");
+  }
+});
 
 module.exports = app;
