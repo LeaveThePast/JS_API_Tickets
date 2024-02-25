@@ -1,7 +1,7 @@
 {
   "name": "js_api_tickets",
   "version": "1.0.0",
-  "description": "Сервер для API",
+  "description": "Сервер для JS_APP_Tickets",
   "main": "app.js",
   "scripts": {
     "start": "node server.js"
