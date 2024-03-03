@@ -12,17 +12,11 @@ const generateId = () => {
 };
 
 class Ticket {
-  constructor(id, name, status) {
+  constructor(id, name, description, status) {
     this.id = id;
     this.name = name;
-    this.status = status;
-  }
-}
-
-class TicketFull extends Ticket {
-  constructor(id, name, description, status) {
-    super(id, name, status);
     this.description = description;
+    this.status = status;
   }
 }
 
@@ -34,7 +28,8 @@ app.get("/", (req, res) => {
 
   if (method === "allTickets") {
     const simplifiedTickets = tickets.map(
-      ({ id, name, status }) => new Ticket(id, name, status)
+      ({ id, name, description, status }) =>
+        new Ticket(id, name, description, status)
     );
     res.json(simplifiedTickets);
   } else if (method === "ticketById") {
@@ -42,13 +37,7 @@ app.get("/", (req, res) => {
     const ticket = tickets.find((t) => t.id === id);
 
     if (ticket) {
-      const ticketFull = new TicketFull(
-        ticket.id,
-        ticket.name,
-        ticket.description,
-        ticket.status
-      );
-      res.json(ticketFull);
+      res.json(ticket);
     } else {
       res.status(404).send();
     }
@@ -62,8 +51,8 @@ app.post("/", (req, res) => {
 
   if (method === "createTicket") {
     const { name, description, status } = req.body;
-    const newTicket = new Ticket(generateId(), name, status);
-    tickets.push({ ...newTicket, description });
+    const newTicket = new Ticket(generateId(), name, description, status);
+    tickets.push(newTicket);
     res.json(newTicket);
   } else {
     res.status(400).send("Invalid method");
